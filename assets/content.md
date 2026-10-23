@@ -131,18 +131,22 @@ Has owned projects from architecture to store release, mentors junior developers
 
 > Let's build your next app together.
 
-I'm open to senior Flutter roles and freelance projects. The fastest way to reach me is email.
+I'm open to senior Flutter role and freelance projects. The fastest way to reach me is email.
 
 <!--
-  "Email", "Location" and "Resume" are special. Every other line becomes a
+  "Email", "Phone", "Location", "Resume" and "Coffee" are special. Leave a
+  value empty to hide it. Phone takes an Indian mobile number in any form
+  (98765 43210, +91 9876543210, 09876543210) and shows it as +91 98765 43210. Every other line becomes a
   button. For Resume, paste a Google Drive share link (set to "Anyone with the
   link") — it is turned into a direct download — or put a PDF in web/ and
   write its file name.
   Remove any line you don't want shown.
 -->
-- Email: you@example.com
+- Email: abhijithsabu.dev@gmail.com
+- Phone: 8138801526
 <!-- - Location: TODO City, Country -->
 - GitHub: https://github.com/abhijithsabudev
-<!-- - LinkedIn: https://www.linkedin.com/in/your-profile -->
+- Coffee: buymeacoffee.com/abhijithsabudev
+- LinkedIn: https://www.linkedin.com/in/abhijithksabu
 <!-- - pub.dev: https://pub.dev/publishers/your-publisher/packages -->
-<!-- - Resume: https://drive.google.com/file/d/YOUR_FILE_ID/view?usp=sharing -->
+- Resume: https://drive.google.com/file/d/1WlqNiG5HBb-SJV8sa0Nrod2dIuCoJQME/view?usp=sharing

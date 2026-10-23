@@ -22,6 +22,16 @@ class Portfolio {
   ContactSection? get contact =>
       sections.whereType<ContactSection>().firstOrNull;
 
+  /// The name as shown on the page: an ALL-CAPS name is title-cased, since
+  /// capitals at display size read as a heavy block. Mixed case is kept.
+  String get displayName {
+    if (name != name.toUpperCase()) return name;
+    return name
+        .split(' ')
+        .map((w) => w.isEmpty ? w : w[0] + w.substring(1).toLowerCase())
+        .join(' ');
+  }
+
   /// "Senior Flutter Developer | iOS • Android" → "Senior Flutter Developer".
   String get roleTitle => role.split('|').first.trim();
 
@@ -192,15 +202,24 @@ class ContactSection extends PortfolioSection {
     required this.intro,
     this.headline = '',
     required this.email,
+    this.phone = '',
     required this.location,
     required this.resumeUrl,
+    this.coffeeUrl = '',
     required this.links,
   });
   final String intro;
   final String headline;
   final String email;
+
+  /// Display form, e.g. "+91 98765 43210"; empty hides the call buttons.
+  final String phone;
+  String get phoneUrl => 'tel:${phone.replaceAll(RegExp(r'[^+0-9]'), '')}';
   final String location;
   final String resumeUrl;
+
+  /// Buy Me a Coffee page; empty hides the button.
+  final String coffeeUrl;
   final List<ContactLink> links;
   @override
   String get navLabel => 'Contact';

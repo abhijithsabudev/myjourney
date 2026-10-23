@@ -20,7 +20,9 @@ void main(List<String> args) {
       .replaceFirst('--site-url=', '');
 
   final p = parsePortfolio(File('assets/content.md').readAsStringSync());
-  final title = p.name.isEmpty ? 'Portfolio' : '${p.name} · ${p.roleTitle}';
+  final title = p.name.isEmpty
+      ? 'Portfolio'
+      : '${p.displayName} · ${p.roleTitle}';
   final description = _truncate(
     p.sections
             .whereType<SummarySection>()
@@ -44,7 +46,7 @@ void main(List<String> args) {
       )
       .replaceFirst(
         RegExp(r'<meta name="apple-mobile-web-app-title"[^>]*>'),
-        '<meta name="apple-mobile-web-app-title" content="${_esc(p.name)}">',
+        '<meta name="apple-mobile-web-app-title" content="${_esc(p.displayName)}">',
       );
 
   final image = siteUrl.isEmpty
@@ -69,7 +71,9 @@ void main(List<String> args) {
       jsonDecode(manifestFile.readAsStringSync()) as Map<String, dynamic>;
   manifest
     ..['name'] = title
-    ..['short_name'] = p.name.isEmpty ? 'Portfolio' : p.name.split(' ').first
+    ..['short_name'] = p.name.isEmpty
+        ? 'Portfolio'
+        : p.displayName.split(' ').first
     ..['description'] = description;
   manifestFile.writeAsStringSync(
     const JsonEncoder.withIndent('    ').convert(manifest),
@@ -82,7 +86,7 @@ void main(List<String> args) {
 /// Visually hidden; Flutter renders the real page on top.
 String _seoContent(Portfolio p) {
   final b = StringBuffer('<main class="seo">\n');
-  b.writeln('<h1>${_esc(p.name)}</h1>');
+  b.writeln('<h1>${_esc(p.displayName)}</h1>');
   b.writeln('<p>${_esc(p.role)}</p>');
   if (p.tagline.isNotEmpty) b.writeln('<p>${_esc(p.tagline)}</p>');
   for (final s in p.sections) {
@@ -119,6 +123,8 @@ String _seoContent(Portfolio p) {
         final links = [
           ...s.links.where((l) => l.url.startsWith('http')),
           if (s.resumeUrl.isNotEmpty) ContactLink('Resume', s.resumeUrl),
+          if (s.coffeeUrl.isNotEmpty)
+            ContactLink('Buy me a coffee', s.coffeeUrl),
         ];
         if (links.isEmpty) continue;
         b.writeln('<h2>${_esc(s.title)}</h2><ul>');

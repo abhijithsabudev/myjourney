@@ -810,6 +810,12 @@ class ContactBody extends StatelessWidget {
                     icon: Icons.mail_outline,
                     onPressed: () => openUrl('mailto:${section.email}'),
                   ),
+                if (section.phone.isNotEmpty)
+                  OutlinedButton.icon(
+                    onPressed: () => openUrl(section.phoneUrl),
+                    icon: const Icon(Icons.phone_outlined),
+                    label: Text(section.phone),
+                  ),
                 if (section.resumeUrl.isNotEmpty)
                   OutlinedButton.icon(
                     onPressed: () => openUrl(section.resumeUrl),
@@ -854,6 +860,16 @@ class ContactBody extends StatelessWidget {
                   ),
                 ],
               ),
+            ],
+            if (section.coffeeUrl.isNotEmpty) ...[
+              const SizedBox(height: 36),
+              Text(
+                'Enjoying my work? Fuel the next build.',
+                textAlign: TextAlign.center,
+                style: _muted(context),
+              ),
+              const SizedBox(height: 14),
+              CoffeeButton(onPressed: () => openUrl(section.coffeeUrl)),
             ],
           ],
         ),

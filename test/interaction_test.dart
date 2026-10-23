@@ -234,7 +234,12 @@ void main() {
       final launcher = await pumpApp(tester, desktop);
       final contact = portfolio.contact!;
 
-      // Hero social icons.
+      // Hero contact icons.
+      if (contact.phone.isNotEmpty) {
+        await tester.tap(find.byTooltip('Call').first);
+        await tester.pump();
+        expect(launcher.launched.last, contact.phoneUrl);
+      }
       for (final link in contact.links) {
         await tester.tap(find.byTooltip(link.label).first);
         await tester.pump();

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../content/models.dart';
+import '../theme.dart';
 import 'effects.dart';
 
 const maxContentWidth = 1100.0;
@@ -270,16 +271,28 @@ class ResponsiveGrid extends StatelessWidget {
                 .clamp(1, 4);
         final width =
             (constraints.maxWidth - spacing * (columns - 1)) / columns;
-        return Wrap(
+        // Cards in a row share the tallest card's height.
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           spacing: spacing,
-          runSpacing: spacing,
           children: [
-            for (var i = 0; i < children.length; i++)
-              SizedBox(
-                width: width,
-                child: Reveal(
-                  delay: Duration(milliseconds: 60 * (i % columns)),
-                  child: children[i],
+            for (var row = 0; row < children.length; row += columns)
+              IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  spacing: spacing,
+                  children: [
+                    for (var i = row; i < row + columns; i++)
+                      SizedBox(
+                        width: width,
+                        child: i < children.length
+                            ? Reveal(
+                                delay: Duration(milliseconds: 60 * (i - row)),
+                                child: children[i],
+                              )
+                            : null,
+                      ),
+                  ],
                 ),
               ),
           ],
@@ -478,9 +491,10 @@ class _GlowButtonState extends State<GlowButton> {
         onTap: widget.onPressed,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          height: buttonHeight,
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(12),
             gradient: LinearGradient(
               colors: [scheme.primary, scheme.secondary],
             ),
@@ -501,13 +515,77 @@ class _GlowButtonState extends State<GlowButton> {
                 child: Text(
                   widget.label,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: ink,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: buttonLabel.copyWith(color: ink),
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Buy Me a Coffee pill in the service's own yellow, lifting on hover.
+class CoffeeButton extends StatefulWidget {
+  const CoffeeButton({super.key, required this.onPressed});
+  final VoidCallback onPressed;
+
+  @override
+  State<CoffeeButton> createState() => _CoffeeButtonState();
+}
+
+class _CoffeeButtonState extends State<CoffeeButton> {
+  var _hover = false;
+
+  @override
+  Widget build(BuildContext context) {
+    const yellow = Color(0xFFFFDD00);
+    const ink = Color(0xFF0D0C22);
+    return Semantics(
+      button: true,
+      label: 'Buy me a coffee',
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        onEnter: (_) => setState(() => _hover = true),
+        onExit: (_) => setState(() => _hover = false),
+        child: GestureDetector(
+          onTap: widget.onPressed,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            transform: Matrix4.translationValues(0, _hover ? -3 : 0, 0),
+            height: buttonHeight,
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            decoration: BoxDecoration(
+              color: yellow,
+              borderRadius: BorderRadius.circular(999),
+              boxShadow: [
+                BoxShadow(
+                  color: yellow.withValues(alpha: _hover ? 0.45 : 0.22),
+                  blurRadius: _hover ? 26 : 14,
+                  offset: const Offset(0, 6),
+                ),
+              ],
+            ),
+            // Scales down rather than clipping on the narrowest phones.
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AnimatedRotation(
+                    turns: _hover ? -0.04 : 0,
+                    duration: const Duration(milliseconds: 200),
+                    child: const Icon(Icons.local_cafe, size: 20, color: ink),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Buy me a coffee',
+                    style: buttonLabel.copyWith(color: ink),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
