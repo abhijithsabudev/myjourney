@@ -19,7 +19,7 @@ in short:
 | `## Open-Source…` with `- **package** – text` | pub.dev package cards |
 | `## Education` with `### Degree — Dates` | Education cards |
 | `## Certifications` / `## Awards` | Simple list |
-| `## Contact` with `- Email:`, `- Location:`, `- Resume:`, `- Any Label: url` | Contact buttons |
+| `## Contact` with `- Email:`, `- Location:`, `- Resume:`, `- Coffee:`, `- Any Label: url` | Contact buttons (Coffee adds a Buy Me a Coffee pill) |
 | Any other `## Heading` | Plain text section |
 
 Sections appear in the order you write them. Search the file for `TODO` to find

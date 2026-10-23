@@ -514,3 +514,69 @@ class _GlowButtonState extends State<GlowButton> {
     );
   }
 }
+
+/// Buy Me a Coffee pill in the service's own yellow, lifting on hover.
+class CoffeeButton extends StatefulWidget {
+  const CoffeeButton({super.key, required this.onPressed});
+  final VoidCallback onPressed;
+
+  @override
+  State<CoffeeButton> createState() => _CoffeeButtonState();
+}
+
+class _CoffeeButtonState extends State<CoffeeButton> {
+  var _hover = false;
+
+  @override
+  Widget build(BuildContext context) {
+    const yellow = Color(0xFFFFDD00);
+    const ink = Color(0xFF0D0C22);
+    return Semantics(
+      button: true,
+      label: 'Buy me a coffee',
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        onEnter: (_) => setState(() => _hover = true),
+        onExit: (_) => setState(() => _hover = false),
+        child: GestureDetector(
+          onTap: widget.onPressed,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            transform: Matrix4.translationValues(0, _hover ? -3 : 0, 0),
+            padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
+            decoration: BoxDecoration(
+              color: yellow,
+              borderRadius: BorderRadius.circular(999),
+              boxShadow: [
+                BoxShadow(
+                  color: yellow.withValues(alpha: _hover ? 0.45 : 0.22),
+                  blurRadius: _hover ? 26 : 14,
+                  offset: const Offset(0, 6),
+                ),
+              ],
+            ),
+            // Scales down rather than clipping on the narrowest phones.
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AnimatedRotation(
+                    turns: _hover ? -0.04 : 0,
+                    duration: const Duration(milliseconds: 200),
+                    child: const Icon(Icons.local_cafe, size: 20, color: ink),
+                  ),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'Buy me a coffee',
+                    style: TextStyle(color: ink, fontWeight: FontWeight.w700),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

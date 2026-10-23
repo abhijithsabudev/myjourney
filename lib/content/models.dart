@@ -194,6 +194,7 @@ class ContactSection extends PortfolioSection {
     required this.email,
     required this.location,
     required this.resumeUrl,
+    this.coffeeUrl = '',
     required this.links,
   });
   final String intro;
@@ -201,6 +202,9 @@ class ContactSection extends PortfolioSection {
   final String email;
   final String location;
   final String resumeUrl;
+
+  /// Buy Me a Coffee page; empty hides the button.
+  final String coffeeUrl;
   final List<ContactLink> links;
   @override
   String get navLabel => 'Contact';

@@ -104,4 +104,16 @@ Some prose with **bold**.
 ''');
     expect(p.contact!.resumeUrl, direct);
   });
+
+  test('Coffee line becomes the Buy Me a Coffee link', () {
+    final p = parsePortfolio('''
+# A
+**Role**
+
+## Contact
+- Coffee: buymeacoffee.com/someone
+''');
+    expect(p.contact!.coffeeUrl, 'https://buymeacoffee.com/someone');
+    expect(p.contact!.links, isEmpty);
+  });
 }

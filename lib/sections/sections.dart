@@ -855,6 +855,16 @@ class ContactBody extends StatelessWidget {
                 ],
               ),
             ],
+            if (section.coffeeUrl.isNotEmpty) ...[
+              const SizedBox(height: 36),
+              Text(
+                'Enjoying my work? Fuel the next build.',
+                textAlign: TextAlign.center,
+                style: _muted(context),
+              ),
+              const SizedBox(height: 14),
+              CoffeeButton(onPressed: () => openUrl(section.coffeeUrl)),
+            ],
           ],
         ),
       ),

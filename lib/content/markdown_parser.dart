@@ -216,12 +216,13 @@ EducationSection _parseEducation(_RawSection s) {
   return EducationSection(s.title, entries);
 }
 
-/// `- Label: value`. `Email`, `Location` and `Resume` are special; every
-/// other label becomes a link button.
+/// `- Label: value`. `Email`, `Location`, `Resume` and `Coffee` are special;
+/// every other label becomes a link button.
 ContactSection _parseContact(_RawSection s) {
   var email = '';
   var location = '';
   var resume = '';
+  var coffee = '';
   final links = <ContactLink>[];
   for (final text in s.bullets) {
     final match = RegExp(r'^\**([^:*]+?)\**\s*:\**\s*(.+)$').firstMatch(text);
@@ -237,6 +238,8 @@ ContactSection _parseContact(_RawSection s) {
         location = stripInline(value);
       case 'resume' || 'cv':
         resume = driveDownloadUrl(value);
+      case 'coffee' || 'buy me a coffee':
+        coffee = value.contains('://') ? value : 'https://$value';
       case 'phone':
         links.add(ContactLink(label, 'tel:${value.replaceAll(' ', '')}'));
       default:
@@ -250,6 +253,7 @@ ContactSection _parseContact(_RawSection s) {
     email: email,
     location: location,
     resumeUrl: resume,
+    coffeeUrl: coffee,
     links: links,
   );
 }

@@ -119,6 +119,8 @@ String _seoContent(Portfolio p) {
         final links = [
           ...s.links.where((l) => l.url.startsWith('http')),
           if (s.resumeUrl.isNotEmpty) ContactLink('Resume', s.resumeUrl),
+          if (s.coffeeUrl.isNotEmpty)
+            ContactLink('Buy me a coffee', s.coffeeUrl),
         ];
         if (links.isEmpty) continue;
         b.writeln('<h2>${_esc(s.title)}</h2><ul>');
