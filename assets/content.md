@@ -142,8 +142,8 @@ I'm open to senior Flutter role and freelance projects. The fastest way to reach
   write its file name.
   Remove any line you don't want shown.
 -->
-- Email: you@example.com
-- Phone:
+- Email: abhijithsabu.dev@gmail.com
+- Phone: 8138801526
 <!-- - Location: TODO City, Country -->
 - GitHub: https://github.com/abhijithsabudev
 - Coffee: buymeacoffee.com/abhijithsabudev
