@@ -105,6 +105,35 @@ Some prose with **bold**.
     expect(p.contact!.resumeUrl, direct);
   });
 
+  test('Indian phone numbers are normalised; empty fields are hidden', () {
+    for (final input in [
+      '9876543210',
+      '98765 43210',
+      '+91 98765-43210',
+      '919876543210',
+      '09876543210',
+    ]) {
+      expect(indianPhone(input), '+91 98765 43210', reason: input);
+    }
+    expect(indianPhone('+1 415 555 0100'), '+1 415 555 0100');
+
+    final p = parsePortfolio('''
+# A
+**Role**
+
+## Contact
+- Email:
+- Phone: 98765 43210
+''');
+    expect(p.contact!.email, isEmpty);
+    expect(p.contact!.phone, '+91 98765 43210');
+    expect(p.contact!.phoneUrl, 'tel:+919876543210');
+    expect(p.contact!.links, isEmpty);
+
+    final empty = parsePortfolio('# A\n**Role**\n\n## Contact\n- Phone:\n');
+    expect(empty.contact!.phone, isEmpty);
+  });
+
   test('Coffee line becomes the Buy Me a Coffee link', () {
     final p = parsePortfolio('''
 # A

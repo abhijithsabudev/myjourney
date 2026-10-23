@@ -810,6 +810,12 @@ class ContactBody extends StatelessWidget {
                     icon: Icons.mail_outline,
                     onPressed: () => openUrl('mailto:${section.email}'),
                   ),
+                if (section.phone.isNotEmpty)
+                  OutlinedButton.icon(
+                    onPressed: () => openUrl(section.phoneUrl),
+                    icon: const Icon(Icons.phone_outlined),
+                    label: Text(section.phone),
+                  ),
                 if (section.resumeUrl.isNotEmpty)
                   OutlinedButton.icon(
                     onPressed: () => openUrl(section.resumeUrl),

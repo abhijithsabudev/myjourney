@@ -216,10 +216,12 @@ EducationSection _parseEducation(_RawSection s) {
   return EducationSection(s.title, entries);
 }
 
-/// `- Label: value`. `Email`, `Location`, `Resume` and `Coffee` are special;
-/// every other label becomes a link button.
+/// `- Label: value`. `Email`, `Phone`, `Location`, `Resume` and `Coffee` are
+/// special; every other label becomes a link button. A line with no value is
+/// skipped, so empty fields hide their buttons.
 ContactSection _parseContact(_RawSection s) {
   var email = '';
+  var phone = '';
   var location = '';
   var resume = '';
   var coffee = '';
@@ -240,8 +242,8 @@ ContactSection _parseContact(_RawSection s) {
         resume = driveDownloadUrl(value);
       case 'coffee' || 'buy me a coffee':
         coffee = value.contains('://') ? value : 'https://$value';
-      case 'phone':
-        links.add(ContactLink(label, 'tel:${value.replaceAll(' ', '')}'));
+      case 'phone' || 'mobile':
+        phone = indianPhone(value);
       default:
         links.add(ContactLink(label, value));
     }
@@ -251,6 +253,7 @@ ContactSection _parseContact(_RawSection s) {
     intro: s.paragraphs.join('\n\n'),
     headline: s.quote,
     email: email,
+    phone: phone,
     location: location,
     resumeUrl: resume,
     coffeeUrl: coffee,
@@ -276,6 +279,24 @@ String driveDownloadUrl(String url) {
       : uri.queryParameters['id'];
   if (id == null || id.isEmpty) return url;
   return 'https://drive.google.com/uc?export=download&id=$id';
+}
+
+/// Formats an Indian mobile number as "+91 98765 43210", accepting it with or
+/// without the +91 / 91 / 0 prefix and any spacing. Other numbers (another
+/// country code, landlines) are returned as written.
+String indianPhone(String value) {
+  final digits = value.replaceAll(RegExp(r'\D'), '');
+  final local = switch (digits.length) {
+    10 => digits,
+    11 when digits.startsWith('0') => digits.substring(1),
+    12 when digits.startsWith('91') => digits.substring(2),
+    _ => null,
+  };
+  if (local == null ||
+      value.trim().startsWith('+') && !digits.startsWith('91')) {
+    return value.trim();
+  }
+  return '+91 ${local.substring(0, 5)} ${local.substring(5)}';
 }
 
 /// Removes Markdown emphasis and turns `[text](url)` into `text`.

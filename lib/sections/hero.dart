@@ -216,12 +216,33 @@ class _HeroText extends StatelessWidget {
             ],
           ),
         ),
-        if (contact != null && contact.links.isNotEmpty) ...[
+        if (contact != null &&
+            (contact.links.isNotEmpty ||
+                contact.email.isNotEmpty ||
+                contact.phone.isNotEmpty)) ...[
           const SizedBox(height: 20),
           step(
             Wrap(
               spacing: 4,
               children: [
+                if (contact.email.isNotEmpty)
+                  Magnetic(
+                    strength: 0.4,
+                    child: IconButton(
+                      tooltip: 'Email',
+                      onPressed: () => openUrl('mailto:${contact.email}'),
+                      icon: const Icon(Icons.mail_outline),
+                    ),
+                  ),
+                if (contact.phone.isNotEmpty)
+                  Magnetic(
+                    strength: 0.4,
+                    child: IconButton(
+                      tooltip: 'Call',
+                      onPressed: () => openUrl(contact.phoneUrl),
+                      icon: const Icon(Icons.phone_outlined),
+                    ),
+                  ),
                 for (final link in contact.links)
                   Magnetic(
                     strength: 0.4,

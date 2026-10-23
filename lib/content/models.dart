@@ -192,6 +192,7 @@ class ContactSection extends PortfolioSection {
     required this.intro,
     this.headline = '',
     required this.email,
+    this.phone = '',
     required this.location,
     required this.resumeUrl,
     this.coffeeUrl = '',
@@ -200,6 +201,10 @@ class ContactSection extends PortfolioSection {
   final String intro;
   final String headline;
   final String email;
+
+  /// Display form, e.g. "+91 98765 43210"; empty hides the call buttons.
+  final String phone;
+  String get phoneUrl => 'tel:${phone.replaceAll(RegExp(r'[^+0-9]'), '')}';
   final String location;
   final String resumeUrl;
 
