@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: _NavBar(
-        name: portfolio.name,
+        name: portfolio.displayName,
         sections: compactNav ? const [] : navSections,
         active: _active,
         showMenu: compactNav,
@@ -130,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                         title: s.title,
                         child: buildSection(s),
                       ),
-                    _Footer(name: portfolio.name),
+                    _Footer(name: portfolio.displayName),
                   ],
                 ),
               ),

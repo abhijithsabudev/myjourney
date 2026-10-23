@@ -87,6 +87,13 @@ class _HeroText extends StatelessWidget {
       child: child,
     );
 
+    // The ongoing job, if any, so the badge says where you work now.
+    final current = portfolio.sections
+        .whereType<ExperienceSection>()
+        .expand((s) => s.jobs)
+        .where((j) => j.period.toLowerCase().contains('present'))
+        .firstOrNull;
+
     final nameSize = width >= 1000
         ? (width * 0.052).clamp(56.0, 80.0)
         : (width * 0.11).clamp(40.0, 64.0);
@@ -107,11 +114,15 @@ class _HeroText extends StatelessWidget {
               children: [
                 const _PulseDot(),
                 const SizedBox(width: 8),
-                Text(
-                  "Hi, I'm",
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    color: scheme.primary,
-                    fontFamily: 'monospace',
+                Flexible(
+                  child: Text(
+                    current == null
+                        ? "Hi, I'm"
+                        : 'Currently at ${current.company}',
+                    style: theme.textTheme.labelLarge?.copyWith(
+                      color: scheme.primary,
+                      fontFamily: 'monospace',
+                    ),
                   ),
                 ),
               ],
@@ -123,15 +134,15 @@ class _HeroText extends StatelessWidget {
           delay: Duration(milliseconds: 120 * order++),
           duration: const Duration(milliseconds: 1400),
           builder: (context, t) => StaggeredText(
-            portfolio.name,
+            portfolio.displayName,
             progress: t,
             byLetter: true,
             gradient: true,
             style: theme.textTheme.displayLarge?.copyWith(
               fontWeight: FontWeight.w700,
-              height: 1.05,
+              height: 1.08,
               fontSize: nameSize,
-              letterSpacing: -1.5,
+              letterSpacing: -nameSize * 0.04,
             ),
           ),
         ),
@@ -191,6 +202,7 @@ class _HeroText extends StatelessWidget {
           Wrap(
             spacing: 12,
             runSpacing: 12,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               if (projects != null)
                 Magnetic(
@@ -266,16 +278,30 @@ class _HeroText extends StatelessWidget {
                 final columns = constraints.maxWidth >= 540
                     ? math.min(4, portfolio.stats.length)
                     : 2;
-                final cardWidth =
-                    (constraints.maxWidth - gap * (columns - 1)) / columns;
-                return Wrap(
+                final cardWidth = math.min(
+                  (constraints.maxWidth - gap * (columns - 1)) / columns,
+                  170.0,
+                );
+                // Cards in a row share the tallest card's height.
+                final stats = portfolio.stats;
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: gap,
-                  runSpacing: gap,
                   children: [
-                    for (final s in portfolio.stats)
-                      SizedBox(
-                        width: math.min(cardWidth, 170),
-                        child: _StatCard(stat: s),
+                    for (var i = 0; i < stats.length; i += columns)
+                      IntrinsicHeight(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          spacing: gap,
+                          children: [
+                            for (final s in stats.skip(i).take(columns))
+                              SizedBox(
+                                width: cardWidth,
+                                child: _StatCard(stat: s),
+                              ),
+                          ],
+                        ),
                       ),
                   ],
                 );

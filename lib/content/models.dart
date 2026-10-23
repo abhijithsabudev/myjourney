@@ -22,6 +22,16 @@ class Portfolio {
   ContactSection? get contact =>
       sections.whereType<ContactSection>().firstOrNull;
 
+  /// The name as shown on the page: an ALL-CAPS name is title-cased, since
+  /// capitals at display size read as a heavy block. Mixed case is kept.
+  String get displayName {
+    if (name != name.toUpperCase()) return name;
+    return name
+        .split(' ')
+        .map((w) => w.isEmpty ? w : w[0] + w.substring(1).toLowerCase())
+        .join(' ');
+  }
+
   /// "Senior Flutter Developer | iOS • Android" → "Senior Flutter Developer".
   String get roleTitle => role.split('|').first.trim();
 

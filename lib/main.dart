@@ -39,7 +39,7 @@ class _PortfolioAppState extends State<PortfolioApp> {
       builder: (context, mode, _) => MaterialApp(
         title: widget.portfolio.name.isEmpty
             ? 'Portfolio'
-            : '${widget.portfolio.name} · Portfolio',
+            : '${widget.portfolio.displayName} · Portfolio',
         debugShowCheckedModeBanner: false,
         themeMode: mode,
         themeAnimationDuration: const Duration(milliseconds: 500),

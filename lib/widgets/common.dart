@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../content/models.dart';
+import '../theme.dart';
 import 'effects.dart';
 
 const maxContentWidth = 1100.0;
@@ -478,9 +479,10 @@ class _GlowButtonState extends State<GlowButton> {
         onTap: widget.onPressed,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          height: buttonHeight,
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(12),
             gradient: LinearGradient(
               colors: [scheme.primary, scheme.secondary],
             ),
@@ -501,10 +503,7 @@ class _GlowButtonState extends State<GlowButton> {
                 child: Text(
                   widget.label,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: ink,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: buttonLabel.copyWith(color: ink),
                 ),
               ),
             ],
@@ -543,7 +542,8 @@ class _CoffeeButtonState extends State<CoffeeButton> {
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
             transform: Matrix4.translationValues(0, _hover ? -3 : 0, 0),
-            padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
+            height: buttonHeight,
+            padding: const EdgeInsets.symmetric(horizontal: 24),
             decoration: BoxDecoration(
               color: yellow,
               borderRadius: BorderRadius.circular(999),
@@ -567,9 +567,9 @@ class _CoffeeButtonState extends State<CoffeeButton> {
                     child: const Icon(Icons.local_cafe, size: 20, color: ink),
                   ),
                   const SizedBox(width: 8),
-                  const Text(
+                  Text(
                     'Buy me a coffee',
-                    style: TextStyle(color: ink, fontWeight: FontWeight.w700),
+                    style: buttonLabel.copyWith(color: ink),
                   ),
                 ],
               ),
