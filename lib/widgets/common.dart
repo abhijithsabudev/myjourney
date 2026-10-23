@@ -271,16 +271,28 @@ class ResponsiveGrid extends StatelessWidget {
                 .clamp(1, 4);
         final width =
             (constraints.maxWidth - spacing * (columns - 1)) / columns;
-        return Wrap(
+        // Cards in a row share the tallest card's height.
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           spacing: spacing,
-          runSpacing: spacing,
           children: [
-            for (var i = 0; i < children.length; i++)
-              SizedBox(
-                width: width,
-                child: Reveal(
-                  delay: Duration(milliseconds: 60 * (i % columns)),
-                  child: children[i],
+            for (var row = 0; row < children.length; row += columns)
+              IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  spacing: spacing,
+                  children: [
+                    for (var i = row; i < row + columns; i++)
+                      SizedBox(
+                        width: width,
+                        child: i < children.length
+                            ? Reveal(
+                                delay: Duration(milliseconds: 60 * (i - row)),
+                                child: children[i],
+                              )
+                            : null,
+                      ),
+                  ],
                 ),
               ),
           ],
